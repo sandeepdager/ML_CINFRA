@@ -9,7 +9,7 @@
 //#define TEST_SSLICE
 
 //#pragma hls_design top
-void CNN_test(ac_channel< ac_int<BIT_INP,0> > &inp_chan, ac_channel< ac_int<BIT_OUT,0> > &out_chan)
+void CNN_test(tansor< 32, 32, 3, float >  &inp_image, tansor< 1, 1, 10, float >  &out_class)
 {
 
 #ifdef TEST_RESHAPE
@@ -118,12 +118,41 @@ void CNN(tansor< 32, 32, 3, float >  &inp_image, tansor< 1, 1, 10, float >  &out
 ////////layer_defs.push({type:'softmax', num_classes:10});
 
 
-inp_image.disp();
+//inp_image.disp();
+
+convolutional< 5,32,5,32,3,16,1,float > lay1; 	//Input [32x32x3]  -> Output1 [32x32x16]  
+activation<32, 32, 16, act_relu, float > lay1a;	 
+pooling<2, 32, 2, 32, 16, 2, float > lay2;  	//Input [32x32x16] -> Output2 [16x16x16]  
+convolutional< 5,16,5,16,16,20,1,float > lay3;  //Input [16x16x16] -> Output3 [16x16x20] 
+activation<16, 16, 20, act_relu, float > lay3a;
+pooling<2, 16, 2, 16, 20, 2, float > lay4;  	//Input [16x16x20] -> Output4 [8x8x20]
+convolutional< 5,8,5,8,20,20,1,float > lay5;    //Input [8x8x20]   -> Output5 [8x8x20] 
+activation<8, 8, 20, act_relu, float > lay5a;
+pooling<2, 8, 2, 8, 20, 2, float > lay6;  	//Input [16x16x20] -> Output6 [4x4x20]
+softmax<320, 10, float > lay7;                 	//Input [1x1x320]  -> Output7 [1x1x10]
 
 
+//Executing
+tansor< 32, 32, 16, float > out1;
+out1=lay1a.run(lay1.run(inp_image, 0));
+ 
+tansor< 16, 16, 16, float > out2;
+out2=lay2.run(out1);
 
+tansor< 16, 16, 20, float > out3;
+out3=lay3a.run(lay3.run(out2, 0)); 
 
+tansor< 8, 8, 20, float > out4;
+out4=lay4.run(out3);
 
+tansor< 8, 8, 20, float > out5;
+out5=lay5a.run(lay5.run(out4, 0)); 
+
+tansor< 4, 4, 20, float > out6;
+out6=lay6.run(out5);
+
+tansor< 1, 1, 10, float > out7;
+out7 = lay7.run( out6.reshape<1,1,320>() ); 
 
 }
 

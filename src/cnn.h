@@ -214,15 +214,15 @@ class tansor
 					for(int i=0;i<L;i++)
 						this->data[k][j][i]=(T) init_data[k*L*W+j*L +i];
 		}
-/*	
-		inline void load( const T* init_data )
-		{
+		/*	
+			inline void load( const T* init_data )
+			{
 			for(int k=0;k<D;k++)
-				for(int j=0;j<W;j++)
-					for(int i=0;i<L;i++)
-						this->data[k][j][i]=(T) (init_data++);
-		}
-*/
+			for(int j=0;j<W;j++)
+			for(int i=0;i<L;i++)
+			this->data[k][j][i]=(T) (init_data++);
+			}
+		 */
 		inline int l(){return L;}
 		inline int w(){return W;}
 		inline int d(){return D;}
@@ -305,6 +305,7 @@ template < int L, int LI, int W, int WI, int D, int DO, int S=1, class T=int >
 class convolutional
 {
 	tansor<L, W, D, T> s, w[DO];
+	tansor < LI/S, WI/S, DO, T > b;
 	public:
 	tansor < LI/S, WI/S, DO, T > run( tansor < LI, WI, D, T > inp, T pad)
 	{
@@ -324,15 +325,27 @@ class convolutional
 				}
 			}
 		}
-		return tmp_out; 
+		tmp_out=tmp_out+b;
+			return tmp_out; 
 	}
 
-	void load(tansor<L, W, D, T> winp[] )
+	void load(tansor<L, W, D, T> winp[])
 	{
 		for(int i = 0; i< DO; i++)
 			w[i] = winp[i];
 	};
-	convolutional(){};
+	void load(tansor<L, W, D, T> winp[], tansor < LI/S, WI/S, DO, T > binp)
+	{
+		for(int i = 0; i< DO; i++)
+			w[i] = winp[i];
+		b=binp;
+
+	};
+
+	convolutional()
+	{
+		b.rst();
+	};
 };
 
 //template < int LengthofWeight, int LengthofImage, int WidthofWeight, int WidthofImage, int DepthofInputVolume, int DepthofOutputVolume, int Stride, class T >

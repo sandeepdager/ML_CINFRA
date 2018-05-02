@@ -1,7 +1,5 @@
-#ifndef __DITHER_EX_H__
-#define __DITHER_EX_H__
-#include<ac_int.h>
-#include<ac_channel.h>
+#ifndef __CNN_EX_H__
+#define __CNN_EX_H__
 #include<iostream>
 #include<fstream>
 #include<iomanip>
