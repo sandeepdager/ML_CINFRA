@@ -1,3 +1,4 @@
+#!/bin/bash 
  rm cnn_ex.exe
  g++ -Wall -I ./ac/ -c ../src/cnn_ex.cpp -o ./cnn_ex.o
  g++ -Wall -I ./ac/ -c ../src/cnn_ex_tb.cpp -o ./cnn_ex_tb.o
