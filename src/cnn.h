@@ -17,7 +17,17 @@ class tansor
 
 	public:
 		T data[D][W][L];
-
+	/*
+		inline tansor operator=( T  inp[D*W*L] )
+		{
+			tansor<L,W,D,T> tmp;
+			for(int k=0;k<D;k++)
+				for(int j=0;j<W;j++)
+					for(int i=0;i<L;i++)
+						tmp.data[k][j][i]=inp+(k*D*L+j*L+i);
+			return tmp;
+		}
+	*/
 		inline tansor operator+(const tansor& inp )
 		{
 			tansor<L,W,D,T> tmp;

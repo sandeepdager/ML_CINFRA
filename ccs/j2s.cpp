@@ -133,9 +133,9 @@ int main () {
 		{
 		wcount++;
 		if(wb==1)
-			std::cout<<"float >  l"<<lcount<<"b";
+			std::cout<<"float > l"<<lcount<<"b; float biases"<<lcount<<"[]=";
 		else	
-			std::cout<<"float >  l"<<lcount<<"w"<<(wcount-1) ;
+			std::cout<<"float >  l"<<lcount<<"w"<<(wcount-1)<<"; float weight"<<lcount<<"w"<<(wcount-1)<<"[]=" ;
 		}
 
 		strcpy(pat,"\"");
@@ -150,7 +150,10 @@ int main () {
 		std::cout << c;
 		if(pmatch(pat,buff))
 		{
-			std::cout<<";\n";
+		if(wb==1)
+			std::cout<<";l"<<lcount<<"b.load(biases"<<lcount<<");\n";
+		else	
+			std::cout<<";l"<<lcount<<"w"<<(wcount-1)<<".load(weight"<<lcount<<"w"<<(wcount-1)<<");\n";
 		}
 	}
 	//std::cout<<"Pat match for "<<count<<" times"<<std::endl;

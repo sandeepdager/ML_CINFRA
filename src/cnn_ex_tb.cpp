@@ -20,17 +20,17 @@ int main(int argc, char *argv[])
 	//int inp_int, out_count=0; 
 
 
-  bitmap_image image(32,32);
-  tansor< 32, 32, 3, float > image_in;		
-  tansor< 1, 1, 10, float > class_out;		
+	bitmap_image image(32,32);
+	tansor< 32, 32, 3, float > image_in;		
+	tansor< 1, 1, 10, float > class_out;		
 	// Main test iterations start here
 	cifar10 img_cifar;
 	for (int iteration = 1; iteration <= N_IMG; ++iteration) {
 		//img_i>>inp_int;
 		//char inp_img[1024];
-		
+
 		img_i.read((char*)&img_cifar,sizeof(cifar10));
-	
+
 		for(int y=0;y<32;y++)
 		{
 			for(int x=0;x<32;x++)
@@ -42,26 +42,29 @@ int main(int argc, char *argv[])
 			}
 		}
 		image.save_image("image_out.bmp");
- 
+
 		if(iteration<=HIEGHT*WIDTH)
 			count++;
 		else
 			count=0;
 
 		// Call original function and capture data
+#ifdef TEST
+		CNN_test(image_in, class_out);
+#else
 		CNN(image_in, class_out);
-
+#endif	
 		// Flushing ac_channel based outputs
-/*
-		while (out.available(1))
-		{ 
-			output = out.read();
-			if((out_count!=0)&&(out_count<=HIEGHT*WIDTH))
-				img_o<<output<<endl;
-			out_count++;      
-			//std::cout<<output<<std::endl;
+		/*
+		   while (out.available(1))
+		   { 
+		   output = out.read();
+		   if((out_count!=0)&&(out_count<=HIEGHT*WIDTH))
+		   img_o<<output<<endl;
+		   out_count++;      
+		//std::cout<<output<<std::endl;
 		}
-*/
+		 */
 	}
 	// Return success
 	img_i.close();	

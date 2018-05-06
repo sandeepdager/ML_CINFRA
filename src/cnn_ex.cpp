@@ -1,7 +1,8 @@
 
 #include "cnn_ex.h"
-
-#define TEST_SOFT_MAX
+//#define TEST_EQU
+#define TEST_W
+//#define TEST_SOFT_MAX
 //#define TEST_LOAD
 //#define TEST_INIT
 //#define TEST_POOL
@@ -11,6 +12,17 @@
 //#pragma hls_design top
 void CNN_test(tansor< 32, 32, 3, float >  &inp_image, tansor< 1, 1, 10, float >  &out_class)
 {
+#ifdef TEST_W
+#include "w.h"
+	l4b.disp();
+#endif
+
+#ifdef TEST_EQU
+	//TODO
+	float w[]={1.1, 1.2, 1.3, 1.4, 2.1, 2.2, 2.3, 2.4, 3.1, 3.2, 3.3, 3.4};
+	tansor<2,2,3,float> tin(w);
+	tin.disp();
+#endif
 
 #ifdef TEST_RESHAPE
 	tansor<6,6,3,int> tin;
