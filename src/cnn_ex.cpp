@@ -1,7 +1,7 @@
 
 #include "cnn_ex.h"
 //#define TEST_EQU
-#define TEST_W
+//#define TEST_W
 //#define TEST_SOFT_MAX
 //#define TEST_LOAD
 //#define TEST_INIT
@@ -13,8 +13,14 @@
 void CNN_test(tansor< 32, 32, 3, float >  &inp_image, tansor< 1, 1, 10, float >  &out_class)
 {
 #ifdef TEST_W
+
+
 #include "w.h"
-	l4b.disp();
+	l1[2].disp();
+	l2[2].disp();
+	l3[2].disp();
+	l4[2].disp();
+
 #endif
 
 #ifdef TEST_EQU
@@ -73,7 +79,7 @@ void CNN_test(tansor< 32, 32, 3, float >  &inp_image, tansor< 1, 1, 10, float > 
 	const float w2[9] = 	{0.01,0.02,0.03,0.04,0.05,0.04,0.03,0.02,0.01};
 	const float w3[9] = 	{0.09,0.08,0.07,0.06,0.05,0.04,0.03,0.02,0.01};
 	tansor< 1,1,9, float > weight[3];
-	
+
 	weight[0].load(w1);
 	weight[1].load(w2);
 	weight[2].load(w3);	
@@ -119,52 +125,57 @@ void CNN_test(tansor< 32, 32, 3, float >  &inp_image, tansor< 1, 1, 10, float > 
 void CNN(tansor< 32, 32, 3, float >  &inp_image, tansor< 1, 1, 10, float >  &out_class)
 {
 
-////////layer_defs = [];
-////////layer_defs.push({type:'input', out_sx:32, out_sy:32, out_depth:3});
-////////layer_defs.push({type:'conv', sx:5, filters:16, stride:1, pad:2, activation:'relu'});
-////////layer_defs.push({type:'pool', sx:2, stride:2});
-////////layer_defs.push({type:'conv', sx:5, filters:20, stride:1, pad:2, activation:'relu'});
-////////layer_defs.push({type:'pool', sx:2, stride:2});
-////////layer_defs.push({type:'conv', sx:5, filters:20, stride:1, pad:2, activation:'relu'});
-////////layer_defs.push({type:'pool', sx:2, stride:2});
-////////layer_defs.push({type:'softmax', num_classes:10});
+	////////layer_defs = [];
+	////////layer_defs.push({type:'input', out_sx:32, out_sy:32, out_depth:3});
+	////////layer_defs.push({type:'conv', sx:5, filters:16, stride:1, pad:2, activation:'relu'});
+	////////layer_defs.push({type:'pool', sx:2, stride:2});
+	////////layer_defs.push({type:'conv', sx:5, filters:20, stride:1, pad:2, activation:'relu'});
+	////////layer_defs.push({type:'pool', sx:2, stride:2});
+	////////layer_defs.push({type:'conv', sx:5, filters:20, stride:1, pad:2, activation:'relu'});
+	////////layer_defs.push({type:'pool', sx:2, stride:2});
+	////////layer_defs.push({type:'softmax', num_classes:10});
 
 
-//inp_image.disp();
+	//inp_image.disp();
 
-convolutional< 5,32,5,32,3,16,1,float > lay1; 	//Input [32x32x3]  -> Output1 [32x32x16]  
-activation<32, 32, 16, act_relu, float > lay1a;	 
-pooling<2, 32, 2, 32, 16, 2, float > lay2;  	//Input [32x32x16] -> Output2 [16x16x16]  
-convolutional< 5,16,5,16,16,20,1,float > lay3;  //Input [16x16x16] -> Output3 [16x16x20] 
-activation<16, 16, 20, act_relu, float > lay3a;
-pooling<2, 16, 2, 16, 20, 2, float > lay4;  	//Input [16x16x20] -> Output4 [8x8x20]
-convolutional< 5,8,5,8,20,20,1,float > lay5;    //Input [8x8x20]   -> Output5 [8x8x20] 
-activation<8, 8, 20, act_relu, float > lay5a;
-pooling<2, 8, 2, 8, 20, 2, float > lay6;  	//Input [16x16x20] -> Output6 [4x4x20]
-softmax<320, 10, float > lay7;                 	//Input [1x1x320]  -> Output7 [1x1x10]
+	#include "w.h"
+	convolutional< 5,32,5,32,3,16,1,float > lay1; 	//Input [32x32x3]  -> Output1 [32x32x16]  
+	activation<32, 32, 16, act_relu, float > lay1a;	 
+	pooling<2, 32, 2, 32, 16, 2, float > lay2;  	//Input [32x32x16] -> Output2 [16x16x16]  
+	convolutional< 5,16,5,16,16,20,1,float > lay3;  //Input [16x16x16] -> Output3 [16x16x20] 
+	activation<16, 16, 20, act_relu, float > lay3a;
+	pooling<2, 16, 2, 16, 20, 2, float > lay4;  	//Input [16x16x20] -> Output4 [8x8x20]
+	convolutional< 5,8,5,8,20,20,1,float > lay5;    //Input [8x8x20]   -> Output5 [8x8x20] 
+	activation<8, 8, 20, act_relu, float > lay5a;
+	pooling<2, 8, 2, 8, 20, 2, float > lay6;  	//Input [16x16x20] -> Output6 [4x4x20]
+	softmax<320, 10, float > lay7;                 	//Input [1x1x320]  -> Output7 [1x1x10]
+	
+	lay1.load(l1, l1b);
+	lay3.load(l2, l2b);
+	lay5.load(l3, l3b);
+	lay7.load(l4);// TODO
+	
+	//Executing
+	tansor< 32, 32, 16, float > out1;
+	out1=lay1a.run(lay1.run(inp_image, 0));
 
+	tansor< 16, 16, 16, float > out2;
+	out2=lay2.run(out1);
 
-//Executing
-tansor< 32, 32, 16, float > out1;
-out1=lay1a.run(lay1.run(inp_image, 0));
- 
-tansor< 16, 16, 16, float > out2;
-out2=lay2.run(out1);
+	tansor< 16, 16, 20, float > out3;
+	out3=lay3a.run(lay3.run(out2, 0)); 
 
-tansor< 16, 16, 20, float > out3;
-out3=lay3a.run(lay3.run(out2, 0)); 
+	tansor< 8, 8, 20, float > out4;
+	out4=lay4.run(out3);
 
-tansor< 8, 8, 20, float > out4;
-out4=lay4.run(out3);
+	tansor< 8, 8, 20, float > out5;
+	out5=lay5a.run(lay5.run(out4, 0)); 
 
-tansor< 8, 8, 20, float > out5;
-out5=lay5a.run(lay5.run(out4, 0)); 
+	tansor< 4, 4, 20, float > out6;
+	out6=lay6.run(out5);
 
-tansor< 4, 4, 20, float > out6;
-out6=lay6.run(out5);
-
-tansor< 1, 1, 10, float > out7;
-out7 = lay7.run( out6.reshape<1,1,320>() ); 
+	tansor< 1, 1, 10, float > out7;
+	out7 = lay7.run( out6.reshape<1,1,320>() ); 
 
 }
 

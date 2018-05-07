@@ -7,7 +7,7 @@
 
 #include "cnn.h"
 #include "bitmap_image.h"
-#define TEST
+//#define TEST
 #define N_IMG 2
 #define WIDTH 512
 #define HIEGHT 512

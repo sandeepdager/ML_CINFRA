@@ -4,6 +4,7 @@
 #include<fstream>
 #include<iomanip>
 #include <math.h>
+#include<typeinfo>
 enum active
 {
 	act_relu = 0,
@@ -28,6 +29,10 @@ class tansor
 			return tmp;
 		}
 	*/
+
+
+
+
 		inline tansor operator+(const tansor& inp )
 		{
 			tansor<L,W,D,T> tmp;
@@ -217,6 +222,12 @@ class tansor
 			}
 			return;
 		}
+
+		void size()
+		{
+			std::cout<<typeid(data[0][0][0]).name()<<" ["<<L<<"x"<<W<<"x"<<D<<"]"<<std::endl;
+		}
+
 		inline void load( const T init_data[D*W*L] )
 		{
 			for(int k=0;k<D;k++)
@@ -315,7 +326,7 @@ template < int L, int LI, int W, int WI, int D, int DO, int S=1, class T=int >
 class convolutional
 {
 	tansor<L, W, D, T> s, w[DO];
-	tansor < LI/S, WI/S, DO, T > b;
+	tansor < 1, 1, DO, T > b;
 	public:
 	tansor < LI/S, WI/S, DO, T > run( tansor < LI, WI, D, T > inp, T pad)
 	{
@@ -331,11 +342,12 @@ class convolutional
 				for(int i=0;i<LI;i+=S)
 				{
 					s = inp_ext.template get_slice< L,W,D >( i,j,0 );
-					tmp_out(i/S, j/S ,p , ((((s*w[p]) .avg_z()) .avg_xy()) (0,0,0)) )  ;
+					tmp_out(i/S, j/S ,p , ((((s*w[p]) .avg_z()) .avg_xy()) (0,0,0))+b(0, 0, p) )  ;
+						
 				}
 			}
 		}
-		tmp_out=tmp_out+b;
+		tmp_out=tmp_out;
 			return tmp_out; 
 	}
 
@@ -344,7 +356,7 @@ class convolutional
 		for(int i = 0; i< DO; i++)
 			w[i] = winp[i];
 	};
-	void load(tansor<L, W, D, T> winp[], tansor < LI/S, WI/S, DO, T > binp)
+	void load(tansor<L, W, D, T> winp[], tansor < 1, 1, DO, T > binp)
 	{
 		for(int i = 0; i< DO; i++)
 			w[i] = winp[i];
