@@ -153,7 +153,7 @@ void CNN(tansor< 32, 32, 3, float >  &inp_image, tansor< 1, 1, 10, float >  &out
 	lay1.load(l1, l1b);
 	lay3.load(l2, l2b);
 	lay5.load(l3, l3b);
-	lay7.load(l4);// TODO
+	lay7.load(l4, l4b);
 	
 	//Executing
 	tansor< 32, 32, 16, float > out1;
@@ -175,7 +175,9 @@ void CNN(tansor< 32, 32, 3, float >  &inp_image, tansor< 1, 1, 10, float >  &out
 	out6=lay6.run(out5);
 
 	tansor< 1, 1, 10, float > out7;
-	out7 = lay7.run( out6.reshape<1,1,320>() ); 
+	out7 = lay7.run( out6.reshape<1,1,320>() );
+
+	out_class=out7; 
 
 }
 

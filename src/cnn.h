@@ -375,6 +375,8 @@ template < int DI, int DO, class T=int >
 class softmax
 {
 	tansor<1, 1, DI, T> s, w[DO];
+	tansor<1, 1, DO, T> b;
+	
 	public:
 	tansor < 1, 1, DO, T > run( tansor < 1, 1, DI, T > inp)
 	{
@@ -395,7 +397,19 @@ class softmax
 		for(int i = 0; i< DO; i++)
 			w[i] = winp[i];
 	};
-	softmax(){};
+
+	void load(tansor<1, 1, DI, T> winp[], tansor < 1, 1, DO, T > binp)
+	{
+		for(int i = 0; i< DO; i++)
+			w[i] = winp[i];
+		b=binp;
+
+	};
+
+	softmax()
+	{
+		b.rst();
+	};
 };
 #endif
 

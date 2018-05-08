@@ -53,7 +53,107 @@ int main(int argc, char *argv[])
 		CNN_test(image_in, class_out);
 #else
 		CNN(image_in, class_out);
-#endif	
+#endif
+std::cout<<"Input Class: \n";	
+		switch(img_cifar.lable)
+		{
+		case 0:
+		std::cout<<"Airplane"<<std::endl;
+		break;
+
+		case 1:
+		std::cout<<"Automobile"<<std::endl;
+		break;
+
+		case 2:
+		std::cout<<"Bird"<<std::endl;
+		break;
+
+		case 3:
+		std::cout<<"Cat"<<std::endl;
+		break;
+	
+		case 4:
+		std::cout<<"Deer"<<std::endl;
+		break;
+
+		case 5:
+		std::cout<<"Dog"<<std::endl;
+		break;
+	
+		case 6:
+		std::cout<<"frog"<<std::endl;
+		break;
+				
+		case 7:
+		std::cout<<"Hourse"<<std::endl;
+		break;		
+
+		case 8:
+		std::cout<<"Ship"<<std::endl;
+		break;
+	
+		case 9:
+		std::cout<<"Truck"<<std::endl;
+		break;
+		
+		default:
+		std::cout<<"Wrong Output class"<<std::endl;
+		break;
+			
+		};
+
+std::cout<<"Output Class: \n";	
+class_out.disp();
+/*
+		switch(img_cifar.lable)
+		{
+		case 0:
+		std::cout<<"Airplane"<<std::endl;
+		break;
+
+		case 1:
+		std::cout<<"Automobile"<<std::endl;
+		break;
+
+		case 2:
+		std::cout<<"Bird"<<std::endl;
+		break;
+
+		case 3:
+		std::cout<<"Cat"<<std::endl;
+		break;
+	
+		case 4:
+		std::cout<<"Deer"<<std::endl;
+		break;
+
+		case 5:
+		std::cout<<"Dog"<<std::endl;
+		break;
+	
+		case 6:
+		std::cout<<"frog"<<std::endl;
+		break;
+				
+		case 7:
+		std::cout<<"Hourse"<<std::endl;
+		break;		
+
+		case 8:
+		std::cout<<"Ship"<<std::endl;
+		break;
+	
+		case 9:
+		std::cout<<"Truck"<<std::endl;
+		break;
+		
+		default:
+		std::cout<<"Wrong Output class"<<std::endl;
+		break;
+			
+		}
+*/				
 		// Flushing ac_channel based outputs
 		/*
 		   while (out.available(1))
