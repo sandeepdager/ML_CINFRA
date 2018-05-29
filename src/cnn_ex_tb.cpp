@@ -30,23 +30,27 @@ int main(int argc, char *argv[])
 		//char inp_img[1024];
 
 		img_i.read((char*)&img_cifar,sizeof(cifar10));
+		img_i.read((char*)&img_cifar,sizeof(cifar10));
 
 		for(int y=0;y<32;y++)
 		{
 			for(int x=0;x<32;x++)
 			{
 				image.set_pixel(x,y,img_cifar.r[y*32+x],img_cifar.g[y*32+x],img_cifar.b[y*32+x]);
-				image_in(x,y,0,(float) img_cifar.r[y*32+x]);
-				image_in(x,y,1,(float) img_cifar.g[y*32+x]);
-				image_in(x,y,2,(float) img_cifar.b[y*32+x]);
+				image_in(31-x,y,0,(float) img_cifar.r[y*32+x]);
+				image_in(31-x,y,1,(float) img_cifar.g[y*32+x]);
+				image_in(31-x,y,2,(float) img_cifar.b[y*32+x]);
 			}
 		}
 		image.save_image("image_out.bmp");
-
+		
+		image_in = (image_in/255)-0.5;
+		//image_in.disp();
 		if(iteration<=HIEGHT*WIDTH)
 			count++;
 		else
 			count=0;
+
 
 		// Call original function and capture data
 #ifdef TEST

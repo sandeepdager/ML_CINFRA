@@ -39,9 +39,41 @@ class tansor
 			for(int k=0;k<D;k++)
 				for(int j=0;j<W;j++)
 					for(int i=0;i<L;i++)
-						tmp.data[k][j][i]=this->data[k][j][i]+inp.data[k][j][i];
+						tmp.data[k][j][i]=this->data[k][j][i] + inp.data[k][j][i];
 			return tmp;
 		}
+
+		inline tansor operator+(const T& inp )
+		{
+			tansor<L,W,D,T> tmp;
+			for(int k=0;k<D;k++)
+				for(int j=0;j<W;j++)
+					for(int i=0;i<L;i++)
+						tmp.data[k][j][i]=this->data[k][j][i] + inp;
+			return tmp;
+		}
+
+		inline tansor operator-(const tansor& inp )
+		{
+			tansor<L,W,D,T> tmp;
+			for(int k=0;k<D;k++)
+				for(int j=0;j<W;j++)
+					for(int i=0;i<L;i++)
+						tmp.data[k][j][i]=this->data[k][j][i] - inp.data[k][j][i];
+			return tmp;
+		}
+
+		inline tansor operator-(const T& inp )
+		{
+			tansor<L,W,D,T> tmp;
+			for(int k=0;k<D;k++)
+				for(int j=0;j<W;j++)
+					for(int i=0;i<L;i++)
+						tmp.data[k][j][i]=this->data[k][j][i] - inp;
+			return tmp;
+		}
+
+
 
 		inline tansor operator*(const tansor& inp )
 		{
@@ -49,7 +81,7 @@ class tansor
 			for(int k=0;k<D;k++)
 				for(int j=0;j<W;j++)
 					for(int i=0;i<L;i++)
-						tmp.data[k][j][i]=this->data[k][j][i]*inp.data[k][j][i];
+						tmp.data[k][j][i]=this->data[k][j][i] * inp.data[k][j][i];
 			return tmp;
 		}
 
@@ -155,7 +187,17 @@ class tansor
 				for(int j=0;j<W;j++)
 					for(int i=0;i<L;i++)
 						tmp.data[k][0][0]+=this->data[k][j][i];
-			//return tmp/(W*L);
+			return tmp/(W*L);
+		}
+
+		inline tansor<1,1,D,T> sum_xy()
+		{
+			tansor<1,1,D,T> tmp;
+			tmp.rst();
+			for(int k=0;k<D;k++)
+				for(int j=0;j<W;j++)
+					for(int i=0;i<L;i++)
+						tmp.data[k][0][0]+=this->data[k][j][i];
 			return tmp;
 		}
 
@@ -167,9 +209,20 @@ class tansor
 				for(int j=0;j<W;j++)
 					for(int i=0;i<L;i++)
 						tmp.data[0][j][i]+=this->data[k][j][i];
-			//return tmp/D;
+			return tmp/D;
+		}
+
+		inline tansor<L,W,1,T> sum_z()
+		{
+			tansor<L,W,1,T> tmp;
+			tmp.rst();
+			for(int k=0;k<D;k++)
+				for(int j=0;j<W;j++)
+					for(int i=0;i<L;i++)
+						tmp.data[0][j][i]+=this->data[k][j][i];
 			return tmp;
 		}
+
 		template < int A, int B, int C >
 			inline tansor<A,B,C,T> reshape( )
 			{
@@ -199,13 +252,108 @@ class tansor
 						}
 					}
 				}
-				//return tmp/D;
 				return tmp;
 			}	
 
+		template < int A, int B, int C >
+			inline tansor<A,B,C,T> reshape_xyz( )
+			{
+				tansor< A, B, C, T> tmp;
+				int a, b, c;
+				a=b=c=0;
+				for(int k=0;k<D;k++)
+				{
+					for(int j=0;j<W;j++)
+					{
+						for(int i=0;i<L;i++)
+						{
+							tmp.data[c][b][a]=this->data[k][j][i];
+							a++;
+							if(a==A)
+							{
+								a=0;
+								b++;
+								if(b==B)
+								{
+									b=0;
+									c++;
+								}	
+							}	
+
+
+						}
+					}
+				}
+				return tmp;
+			}	
+
+		template < int A, int B, int C >
+			inline tansor<A,B,C,T> reshape_yzx( )
+			{
+				tansor< A, B, C, T> tmp;
+				int a, b, c;
+				a=b=c=0;
+				for(int k=0;k<L;k++)
+				{
+					for(int j=0;j<D;j++)
+					{
+						for(int i=0;i<W;i++)
+						{
+							tmp.data[c][b][a]=this->data[j][i][k];
+							a++;
+							if(a==A)
+							{
+								a=0;
+								b++;
+								if(b==B)
+								{
+									b=0;
+									c++;
+								}	
+							}	
+
+
+						}
+					}
+				}
+				return tmp;
+			}	
+
+		template < int A, int B, int C >
+			inline tansor<A,B,C,T> reshape_zxy( )
+			{
+				tansor< A, B, C, T> tmp;
+				int a, b, c;
+				a=b=c=0;
+				for(int k=0;k<W;k++)
+				{
+					for(int j=0;j<L;j++)
+					{
+						for(int i=0;i<D;i++)
+						{
+							tmp.data[c][b][a]=this->data[i][k][j];
+							a++;
+							if(a==A)
+							{
+								a=0;
+								b++;
+								if(b==B)
+								{
+									b=0;
+									c++;
+								}	
+							}	
+
+
+						}
+					}
+				}
+				return tmp;
+			}	
 
 		void disp()
 		{
+			std::cout.precision(12);
 			for(int k=0;k<D;k++)
 			{
 				std::cout<<"depth "<<k<<"=\n";
@@ -235,6 +383,34 @@ class tansor
 					for(int i=0;i<L;i++)
 						this->data[k][j][i]=(T) init_data[k*L*W+j*L +i];
 		}
+
+		inline void load_xyz( const T init_data[D*W*L] )
+		{
+			for(int k=0;k<D;k++)
+				for(int j=0;j<W;j++)
+					for(int i=0;i<L;i++)
+						this->data[k][j][i]=(T) init_data[k*L*W+j*L +i];
+		}
+
+		inline void load_zxy( const T init_data[D*W*L] )
+		{
+			for(int k=0;k<W;k++)
+				for(int j=0;j<L;j++)
+					for(int i=0;i<D;i++)
+						this->data[i][k][j]=(T) init_data[k*L*D+j*D +i];
+		}
+
+		inline void load_yzx( const T init_data[D*W*L] )
+		{
+			for(int k=0;k<L;k++)
+				for(int j=0;j<D;j++)
+					for(int i=0;i<W;i++)
+						this->data[j][i][k]=(T) init_data[k*D*W+j*W +i];
+		}
+
+
+
+
 		/*	
 			inline void load( const T* init_data )
 			{
@@ -342,13 +518,12 @@ class convolutional
 				for(int i=0;i<LI;i+=S)
 				{
 					s = inp_ext.template get_slice< L,W,D >( i,j,0 );
-					tmp_out(i/S, j/S ,p , ((((s*w[p]) .avg_z()) .avg_xy()) (0,0,0))+b(0, 0, p) )  ;
+					tmp_out(i/S, j/S ,p , ((((s*w[p]) .sum_z()) .sum_xy()) (0,0,0)) + b(0, 0, p) )  ;
 						
 				}
 			}
 		}
-		tmp_out=tmp_out;
-			return tmp_out; 
+		return tmp_out; 
 	}
 
 	void load(tansor<L, W, D, T> winp[])
@@ -382,13 +557,19 @@ class softmax
 	{
 
 		//inp.disp();
-		//w[2].disp();	
+		//w[0].disp();	
+		tansor < 1, 1, DO, T > tmp;
 		tansor < 1, 1, DO, T > tmp_out;
-		T sigma=0;
+		T sigma=0, mx_val;
 		for(int p=0;p<DO;p++)
-			tmp_out(0, 0 ,p , exp(((inp*w[p]) .avg_z()) (0,0,0)))  ;
-		//tmp_out.disp();	
-		sigma = tmp_out.avg_z() (0,0,0);
+			tmp(0, 0 ,p , ((((inp*w[p]) .sum_z()) (0,0,0))+ b(0, 0, p)))  ;
+		mx_val=tmp.max_z() (0, 0, 0);
+		tmp=tmp-mx_val;
+		for(int p=0;p<DO;p++)
+			tmp_out(0, 0 ,p , exp(tmp(0,0,p)))  ;
+
+
+		sigma = tmp_out.sum_z() (0,0,0);
 		return tmp_out/sigma; 
 	}
 

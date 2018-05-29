@@ -176,9 +176,9 @@ int main () {
 		if(pmatch(pat,buff))
 		{
 			if(wb==1)
-				std::cout<<";l"<<lcount<<"b.load(biases"<<lcount<<");\n";
+				std::cout<<";l"<<lcount<<"b.load_zxy(biases"<<lcount<<");\n";
 			else	
-				std::cout<<";l"<<lcount<<"w"<<(wcount-1)<<".load(weight"<<lcount<<"w"<<(wcount-1)<<");\n";
+				std::cout<<";l"<<lcount<<"w"<<(wcount-1)<<".load_zxy(weight"<<lcount<<"w"<<(wcount-1)<<");\n";
 		}
 	}
 	std::cout<<dtype;
