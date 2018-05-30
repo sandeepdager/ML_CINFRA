@@ -90,7 +90,12 @@ void CNN_test(tansor< 32, 32, 3, float >  &inp_image, tansor< 1, 1, 10, float > 
 	tout.disp();
 #endif
 
-
+#ifdef TEST_SORT
+	tansor<1,1,10,float> tin;
+	tansor<1,1,10,int> tout;
+	tout=tin.sort();
+	tout.disp();
+#endif
 
 
 

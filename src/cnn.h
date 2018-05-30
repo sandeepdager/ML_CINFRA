@@ -223,6 +223,33 @@ class tansor
 			return tmp;
 		}
 
+
+
+		inline tansor<L,W,D,int> sort()
+		{
+			tansor<1,1,L*W*D,int> idx;
+			tansor<1,1,L*W*D,T> in;
+			in = this->reshape_zxy<1,1,L*W*D>();		
+			idx.sq_fill();
+			for(int k=0;k<L*W*D;k++)
+			{
+				for(int i=(k+1);i<L*W*D;i++)
+				{
+					if ( in(0,0,k) < in(0,0,i))
+					{
+					T sw = in(0,0,k);
+					int swidx = idx(0,0,k);
+					in(0,0,k,in(0,0,i));
+					idx(0,0,k,idx(0,0,i));
+					in(0,0,i,sw);
+					idx(0,0,i,swidx);
+					}
+					
+				}
+			}
+			return idx;
+		}
+
 		template < int A, int B, int C >
 			inline tansor<A,B,C,T> reshape( )
 			{
@@ -349,7 +376,10 @@ class tansor
 					}
 				}
 				return tmp;
-			}	
+			}
+
+		
+	
 
 		void disp()
 		{

@@ -30,7 +30,6 @@ int main(int argc, char *argv[])
 		//char inp_img[1024];
 
 		img_i.read((char*)&img_cifar,sizeof(cifar10));
-		img_i.read((char*)&img_cifar,sizeof(cifar10));
 
 		for(int y=0;y<32;y++)
 		{
@@ -58,7 +57,7 @@ int main(int argc, char *argv[])
 #else
 		CNN(image_in, class_out);
 #endif
-std::cout<<"Input Class: \n";	
+std::cout<<"\nInput Class: \n";	
 		switch(img_cifar.lable)
 		{
 		case 0:
@@ -108,48 +107,53 @@ std::cout<<"Input Class: \n";
 		};
 
 std::cout<<"Output Class: \n";	
-class_out.disp();
-/*
-		switch(img_cifar.lable)
+//class_out.disp();
+tansor<1,1,10,int> sort_out = class_out.sort();
+//sort_out.disp();
+
+	for(int itr=0;  itr<TOP_N ; itr++ )
+	{
+	
+		switch(sort_out(0,0,itr)-1)
 		{
 		case 0:
-		std::cout<<"Airplane"<<std::endl;
+		std::cout<<"Airplane  ";
 		break;
 
 		case 1:
-		std::cout<<"Automobile"<<std::endl;
+		std::cout<<"Automobile";
 		break;
 
 		case 2:
-		std::cout<<"Bird"<<std::endl;
+		std::cout<<"Bird      ";
 		break;
 
 		case 3:
-		std::cout<<"Cat"<<std::endl;
+		std::cout<<"Cat       ";
 		break;
 	
 		case 4:
-		std::cout<<"Deer"<<std::endl;
+		std::cout<<"Deer      ";
 		break;
 
 		case 5:
-		std::cout<<"Dog"<<std::endl;
+		std::cout<<"Dog       ";
 		break;
 	
 		case 6:
-		std::cout<<"frog"<<std::endl;
+		std::cout<<"frog      ";
 		break;
 				
 		case 7:
-		std::cout<<"Hourse"<<std::endl;
+		std::cout<<"Hourse    ";
 		break;		
 
 		case 8:
-		std::cout<<"Ship"<<std::endl;
+		std::cout<<"Ship      ";
 		break;
 	
 		case 9:
-		std::cout<<"Truck"<<std::endl;
+		std::cout<<"Truck     ";
 		break;
 		
 		default:
@@ -157,7 +161,8 @@ class_out.disp();
 		break;
 			
 		}
-*/				
+		std::cout<<"\t"<<(class_out(0,0,(sort_out(0,0,itr)-1))*100)<<"%"<<std::endl;
+	}			
 		// Flushing ac_channel based outputs
 		/*
 		   while (out.available(1))
